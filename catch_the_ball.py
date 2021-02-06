@@ -30,6 +30,8 @@ BLACK = (0, 0, 0)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
 score = 0
+level = 1
+point_for_ball = 10
 
 class Ball:
     """
@@ -56,11 +58,15 @@ class Ball:
         return self.r >= self._get_distance_between_click_and_ball_center(event)
 
 
-def show_score(score, screen):
+def show_inforation(score, screen):
     pygame.font.init()
     my_font = pygame.font.Font(None, 30)
-    text_image = my_font.render(f"Score:{score}", True, RED)
-    screen.blit(text_image, (FIELD_SIZE_X + 20, 20))
+    text_score = my_font.render(f"Score:{score}", True, RED)
+    text_level = my_font.render(f'Level: {level}', True, RED)
+    screen.blit(text_score, (FIELD_SIZE_X + 20, 20))
+    screen.blit(text_level, (FIELD_SIZE_X + 20, 60))
+
+
 
 
 clock = pygame.time.Clock()
@@ -76,7 +82,7 @@ ball = Ball()
 ball.draw(screen=screen)
 
 while not finished:
-    clock.tick(FPS)
+    clock.tick(FPS * (level / 2))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -84,7 +90,7 @@ while not finished:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if ball.clicked(event):
                 print('YOU GOT IT!!')
-                score += 10
+                score += point_for_ball * level
             else:
                 print('MISS!!')
 
@@ -92,7 +98,11 @@ while not finished:
     screen.fill(WHITE, menu_filed)
     ball = Ball()
     ball.draw(screen=screen)
-    show_score(score, screen)
+    show_inforation(score, screen)
     pygame.display.update()
 
+    if score > 100 and level == 1:
+        level += 1
+    elif score > 500 and level == 2:
+        level += 1
 pygame.quit()
