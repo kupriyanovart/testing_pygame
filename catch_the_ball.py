@@ -4,8 +4,13 @@ from pygame.draw import *
 from random import randint
 pygame.init()
 
+# Размеры окна
+WINDOW_SIZE_X = 1100
+WINDOW_SIZE_Y = 600
+
 FPS = 1
-screen = pygame.display.set_mode((1100, 600))
+
+screen = pygame.display.set_mode((WINDOW_SIZE_X, WINDOW_SIZE_Y))
 
 # Размеры игрового поля
 FIELD_SIZE_X = 800
@@ -24,6 +29,7 @@ CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
+score = 0
 
 class Ball:
     """
@@ -50,12 +56,19 @@ class Ball:
         return self.r >= self._get_distance_between_click_and_ball_center(event)
 
 
+def show_score(score, screen):
+    pygame.font.init()
+    my_font = pygame.font.Font(None, 30)
+    text_image = my_font.render(f"Score:{score}", True, RED)
+    screen.blit(text_image, (FIELD_SIZE_X + 20, 20))
+
 
 clock = pygame.time.Clock()
 finished = False
 game_field = pygame.Rect(0, 0, FIELD_SIZE_X, FIELD_SIZE_Y)
+menu_filed = pygame.Rect(FIELD_SIZE_X, 0, WINDOW_SIZE_X, WINDOW_SIZE_Y)
 
-screen.fill(WHITE)
+screen.fill(WHITE, menu_filed)
 screen.fill(BLACK, game_field)
 
 pygame.display.update()
@@ -71,12 +84,15 @@ while not finished:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if ball.clicked(event):
                 print('YOU GOT IT!!')
+                score += 10
             else:
                 print('MISS!!')
 
     screen.fill(BLACK, game_field)
+    screen.fill(WHITE, menu_filed)
     ball = Ball()
     ball.draw(screen=screen)
+    show_score(score, screen)
     pygame.display.update()
 
 pygame.quit()
