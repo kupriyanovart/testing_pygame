@@ -33,6 +33,7 @@ score = 0
 level = 1
 point_for_ball = 10
 
+
 class Ball:
     """
     Создает объект шарик
@@ -45,6 +46,7 @@ class Ball:
         self.y = randint(MAX_RADIUS, FIELD_SIZE_Y - MAX_RADIUS)
         self.r = randint(MIN_RADIUS, MAX_RADIUS)
         self.color = COLORS[randint(0, len(COLORS) - 1)]
+        self.is_clicked = False
 
     def draw(self, screen):
         """Рисует шарик на экране"""
@@ -67,8 +69,6 @@ def show_inforation(score, screen):
     screen.blit(text_level, (FIELD_SIZE_X + 20, 60))
 
 
-
-
 clock = pygame.time.Clock()
 finished = False
 game_field = pygame.Rect(0, 0, FIELD_SIZE_X, FIELD_SIZE_Y)
@@ -89,10 +89,9 @@ while not finished:
             finished = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if ball.clicked(event):
-                print('YOU GOT IT!!')
-                score += point_for_ball * level
-            else:
-                print('MISS!!')
+                if not ball.is_clicked:
+                    score += point_for_ball * level
+                    ball.is_clicked = True
 
     screen.fill(BLACK, game_field)
     screen.fill(WHITE, menu_filed)
@@ -101,7 +100,7 @@ while not finished:
     show_inforation(score, screen)
     pygame.display.update()
 
-    if score > 100 and level == 1:
+    if score > 50 and level == 1:
         level += 1
     elif score > 500 and level == 2:
         level += 1
