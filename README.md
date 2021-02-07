@@ -1,3 +1,4 @@
 # testing_pygame
 testing pygame
-do a "catch the ball" game
+
+1. do a "catch the ball" game
