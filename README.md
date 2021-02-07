@@ -1,2 +1,3 @@
 # testing_pygame
-testing git func
+testing pygame
+do a "catch the ball" game
